@@ -1,0 +1,11 @@
+{
+    "name": "MoodleCow",
+    "description": "Developed by @nay-cat",
+    "version": "1.0",
+    "manifest_version": 3,
+    "action": {
+      "default_popup": "moodlec.html",
+      "default_icon": "images/cow_image.png"
+    },
+    "permissions": ["activeTab", "scripting", "tabs"]
+  }

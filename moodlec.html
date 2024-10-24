@@ -1,0 +1,24 @@
+<html>
+    <link rel="stylesheet" href="moodle.css">
+  <body>
+    <section class="adblock">
+        <h2>0 ads detected</h2>
+        <img src="images/adblock_test.webp" let="adblock">
+    </section>
+    <section class="main">
+        <h1>Moodle Cow Resolver</h1>
+        <h3>API System: </h3>
+        <select name="api-system" id="ai-system">
+            <option value="openai-chatgpt-apikey">openai-chatgpt-apikey</option>
+            <option value="nagaai-apikey">naga-apikey</option>
+        </select>
+        <h3>API Key: </h3>
+        <input id="api-key" type="text">
+        <h3>Model: </h3>
+        <input id="api-model" type="text">
+        <button id="save-button">Save</button>
+        <button id="hide">Hide</button>
+    </section>
+    <script src="popup/popup.js"></script>
+  </body>
+</html>

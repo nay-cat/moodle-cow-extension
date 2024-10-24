@@ -1,0 +1,22 @@
+body {
+    width: 500px;
+    height: 120px;
+    background-color: cyan;
+    border: 10%;
+    border-style: groove;
+}
+
+.main {
+    display: inherit;
+}
+
+button {
+    background-color: cyan;
+}
+
+.adblock {
+    display: none;
+    visibility: hidden;
+    background-color: red;
+
+}
