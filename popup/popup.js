@@ -3,10 +3,17 @@ const selectAI = document.getElementById('ai-system');
 const apiKeyInput = document.getElementById('api-key');
 const model = document.getElementById('api-model');
 const injectButton = document.createElement('button');
-const hideButton = document.getElementById('')
+const hideButton = document.getElementById('hide');
+const documentFront = document.getElementById('main');
+const viewButton = document.getElementById('show');
 const defaultModel = "gpt-3.5-turbo";
-
+const version = "0.0.1dev";
 let isSetup = false;
+
+const versionP = document.createElement("p");
+versionP.textContent = "Version: "+version;
+document.body.appendChild(versionP);
+
 
 function loadSettings() {
     const savedAI = localStorage.getItem('api-system');
@@ -33,7 +40,8 @@ function loadSettings() {
         isSetup = true;
         injectButton.textContent = "Inject";
         injectButton.id = 'inject-button';
-
+        injectButton.className = 'button';
+        injectButton.style = '--color: #ff1867;'
         injectButton.style.padding = '10px 20px';
         injectButton.style.fontSize = '16px';
         injectButton.style.marginTop = '10px';
@@ -69,6 +77,7 @@ button.addEventListener('click', function () {
     const apiKey = apiKeyInput.value.trim();
     const selectedAI = selectAI.value;
     let aiModel = model.value;
+    alert('Saved settings to local storage');
 
     if (apiKey) {
         if (!aiModel) {
@@ -87,7 +96,6 @@ button.addEventListener('click', function () {
         alert("API-Key??");
     }
 });
-
 
 
 function injectCode(apiKey, model) {
