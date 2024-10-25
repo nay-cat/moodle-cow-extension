@@ -3,16 +3,57 @@ body {
     height: 120px;
     background-color: cyan;
     border: 10%;
-    border-style: groove;
+    background-image: url('images/landscape.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
 }
+
+* {cursor: url(https://cur.cursors-4u.net/nature/nat-10/nat910.ani), url(https://cur.cursors-4u.net/nature/nat-10/nat910.png), auto !important;} 
 
 .main {
     display: inherit;
 }
 
-button {
-    background-color: cyan;
+input {
+    border-radius: 7%;
+    font-size: large;
 }
+
+.show {
+    size: 2;
+}
+
+.save-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: right;
+}
+
+select {
+    border-radius: 12%;
+    border-style: dashed;
+    font-size: large;
+}
+
+button {
+    position: relative;
+    text-decoration: none;
+    text-transform: uppercase;
+    border: none;
+    letter-spacing: 0.1rem;
+    font-size: 1rem;
+    padding: 1rem 3rem;
+    transition: 0.2s;
+  }
+  
+  button:hover {
+    letter-spacing: 0.2rem;
+    padding: 1.1rem 3.1rem;
+    background-color: aquamarine;
+  }
+  
+
 
 .adblock {
     display: none;
@@ -20,3 +61,4 @@ button {
     background-color: red;
 
 }
+
