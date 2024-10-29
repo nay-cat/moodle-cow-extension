@@ -7,7 +7,7 @@ const hideButton = document.getElementById('hide');
 const documentFront = document.getElementById('main');
 const viewButton = document.getElementById('show');
 const defaultModel = "gpt-3.5-turbo";
-const version = "0.0.1dev";
+const version = "0.0.2dev";
 let isSetup = false;
 
 const versionP = document.createElement("p");
@@ -98,7 +98,7 @@ button.addEventListener('click', function () {
 });
 
 
-function injectCode(apiKey, model) {
+async function injectCode(apiKey, model) {
     async function fetchAIResponse(questionText, answerOptions) {
         const url = 'https://api.naga.ac/v1/chat/completions';
         console.log(questionText);
@@ -138,7 +138,54 @@ function injectCode(apiKey, model) {
 
         return await fetchWithRetry();
     }
-    function _0x3846(){const _0x20e3ab=['20469XRZwES','map','198WfqXfl','2606776QUtvgI','3411YRklmf','querySelector','2150jmGIXD','357211pIGBlq','1368304QOnjzy','addEventListener','from','59202wbKpND','not\x20found','querySelectorAll','.answer\x20div[data-region=\x22answer-label\x22]','Respuestas:','3792584SpOCxg','length','includes','IA:\x20','click','forEach','log','65mIXCgS','textContent'];_0x3846=function(){return _0x20e3ab;};return _0x3846();}const _0x1994a8=_0x59fe;(function(_0x55197d,_0x49b5ff){const _0x480d07=_0x59fe,_0x2df0ee=_0x55197d();while(!![]){try{const _0x214226=-parseInt(_0x480d07(0x1cf))/0x1+-parseInt(_0x480d07(0x1ca))/0x2*(-parseInt(_0x480d07(0x1c8))/0x3)+-parseInt(_0x480d07(0x1cb))/0x4+-parseInt(_0x480d07(0x1c6))/0x5*(-parseInt(_0x480d07(0x1ba))/0x6)+parseInt(_0x480d07(0x1b7))/0x7+parseInt(_0x480d07(0x1bf))/0x8+-parseInt(_0x480d07(0x1cc))/0x9*(parseInt(_0x480d07(0x1ce))/0xa);if(_0x214226===_0x49b5ff)break;else _0x2df0ee['push'](_0x2df0ee['shift']());}catch(_0x339d3d){_0x2df0ee['push'](_0x2df0ee['shift']());}}}(_0x3846,0x5d7b7));const contentElements=document[_0x1994a8(0x1bc)]('.content');function _0x59fe(_0x2abce4,_0x104af8){const _0x384688=_0x3846();return _0x59fe=function(_0x59feeb,_0x49d99f){_0x59feeb=_0x59feeb-0x1b7;let _0x4ccf44=_0x384688[_0x59feeb];return _0x4ccf44;},_0x59fe(_0x2abce4,_0x104af8);}contentElements[_0x1994a8(0x1c4)](async(_0x2da1b9,_0xa7b1df)=>{const _0x256fc2=_0x1994a8,_0x49533a=_0x2da1b9[_0x256fc2(0x1cd)]('.qtext\x20p'),_0x1a6bb3=_0x49533a?_0x49533a['textContent']['trim']():_0x256fc2(0x1bb);console[_0x256fc2(0x1c5)]('Pregunta\x20'+(_0xa7b1df+0x1)+':\x20'+_0x1a6bb3);try{const _0x3996f8=Array[_0x256fc2(0x1b9)](_0x2da1b9[_0x256fc2(0x1bc)](_0x256fc2(0x1bd))),_0x5cb11e=_0x3996f8[_0x256fc2(0x1c9)](_0x162266=>{const _0x26d7f8=_0x256fc2,_0x5a8aff=_0x162266[_0x26d7f8(0x1cd)]('p')?_0x162266['querySelector']('p')[_0x26d7f8(0x1c7)]['trim']():_0x26d7f8(0x1bb);return _0x5a8aff;});if(_0x5cb11e[_0x256fc2(0x1c0)]>0x0){const _0x19b0b6=await fetchAIResponse(_0x1a6bb3,_0x5cb11e);console['log'](_0x256fc2(0x1c2)+_0x19b0b6),console[_0x256fc2(0x1c5)](_0x256fc2(0x1be)),_0x3996f8['forEach']((_0x4cd98c,_0x54dcdd)=>{const _0x29263c=_0x256fc2,_0xa15648=_0x5cb11e[_0x54dcdd];console['log'](String['fromCharCode'](0x61+_0x54dcdd)+'.\x20'+_0xa15648),_0x4cd98c[_0x29263c(0x1b8)]('mouseover',()=>{const _0x455801=_0x29263c;_0x19b0b6[_0x455801(0x1c1)](_0xa15648)&&_0x4cd98c[_0x455801(0x1c3)]();});});}}catch(_0x1ce409){console['error']('Failed\x20to\x20fetch\x20AI\x20response:',_0x1ce409);}});
+
+    console.log("Trying to webscrapping campus")
+    const documentEntries = document.getElementById('responseform')
+    console.log(documentEntries);
+    var entries = documentEntries.getElementsByClassName('que multichoice deferredfeedback notyetanswered');
+
+
+    // Ajustar para av
+    for (var i = 0; i < entries.length; i++){
+        console.log("started foreach")
+        console.log(entries[i])
+        const questionElement = document.getElementsByClassName("qtext");
+        console.log("asd: "+questionElement)
+        const questionText = questionElement.textContent.trim;
+        console.log(questionElement.textContent)
+        console.log('CF type: Pregunta ' + (index + 1) + ': ' + questionText);
+        
+        try {
+            console.log("Started answer div searcher")
+            const answerElements = Array.from(contentElement.querySelectorAll('.answer div[data-region="answer-label"]'));
+            const answers = answerElements.map(answerElement => {
+                const answerText = answerElement.querySelector('p') ? answerElement.querySelector('p').textContent.trim() : 'Respuesta no encontrada';
+                return answerText;
+            });
+    
+            if (answers.length > 0) {
+                // Llama a una función para obtener la respuesta de IA
+                const aiResponse = fetchAIResponse(questionText, answers);
+                console.log('IA: ' + aiResponse);
+                console.log('Respuestas:');
+    
+                // Muestra las respuestas en la consola
+                answers.forEach((answer, answerIndex) => {
+                    console.log(String.fromCharCode(97 + answerIndex) + '. ' + answer);
+                    answerElements[answerIndex].addEventListener('mouseover', () => {
+                        if (aiResponse.includes(answer)) {
+                            answerElements[answerIndex].click();
+                        }
+                    });
+                });
+            }
+        } catch (error) {
+            console.error('Error al obtener respuesta de la IA:', error);
+        } 
+    }
+
+    // Moodle 4.5 inyection
+    // function _0x3846(){const _0x20e3ab=['20469XRZwES','map','198WfqXfl','2606776QUtvgI','3411YRklmf','querySelector','2150jmGIXD','357211pIGBlq','1368304QOnjzy','addEventListener','from','59202wbKpND','not\x20found','querySelectorAll','.answer\x20div[data-region=\x22answer-label\x22]','Respuestas:','3792584SpOCxg','length','includes','IA:\x20','click','forEach','log','65mIXCgS','textContent'];_0x3846=function(){return _0x20e3ab;};return _0x3846();}const _0x1994a8=_0x59fe;(function(_0x55197d,_0x49b5ff){const _0x480d07=_0x59fe,_0x2df0ee=_0x55197d();while(!![]){try{const _0x214226=-parseInt(_0x480d07(0x1cf))/0x1+-parseInt(_0x480d07(0x1ca))/0x2*(-parseInt(_0x480d07(0x1c8))/0x3)+-parseInt(_0x480d07(0x1cb))/0x4+-parseInt(_0x480d07(0x1c6))/0x5*(-parseInt(_0x480d07(0x1ba))/0x6)+parseInt(_0x480d07(0x1b7))/0x7+parseInt(_0x480d07(0x1bf))/0x8+-parseInt(_0x480d07(0x1cc))/0x9*(parseInt(_0x480d07(0x1ce))/0xa);if(_0x214226===_0x49b5ff)break;else _0x2df0ee['push'](_0x2df0ee['shift']());}catch(_0x339d3d){_0x2df0ee['push'](_0x2df0ee['shift']());}}}(_0x3846,0x5d7b7));const contentElements=document[_0x1994a8(0x1bc)]('.content');function _0x59fe(_0x2abce4,_0x104af8){const _0x384688=_0x3846();return _0x59fe=function(_0x59feeb,_0x49d99f){_0x59feeb=_0x59feeb-0x1b7;let _0x4ccf44=_0x384688[_0x59feeb];return _0x4ccf44;},_0x59fe(_0x2abce4,_0x104af8);}contentElements[_0x1994a8(0x1c4)](async(_0x2da1b9,_0xa7b1df)=>{const _0x256fc2=_0x1994a8,_0x49533a=_0x2da1b9[_0x256fc2(0x1cd)]('.qtext\x20p'),_0x1a6bb3=_0x49533a?_0x49533a['textContent']['trim']():_0x256fc2(0x1bb);console[_0x256fc2(0x1c5)]('Pregunta\x20'+(_0xa7b1df+0x1)+':\x20'+_0x1a6bb3);try{const _0x3996f8=Array[_0x256fc2(0x1b9)](_0x2da1b9[_0x256fc2(0x1bc)](_0x256fc2(0x1bd))),_0x5cb11e=_0x3996f8[_0x256fc2(0x1c9)](_0x162266=>{const _0x26d7f8=_0x256fc2,_0x5a8aff=_0x162266[_0x26d7f8(0x1cd)]('p')?_0x162266['querySelector']('p')[_0x26d7f8(0x1c7)]['trim']():_0x26d7f8(0x1bb);return _0x5a8aff;});if(_0x5cb11e[_0x256fc2(0x1c0)]>0x0){const _0x19b0b6=await fetchAIResponse(_0x1a6bb3,_0x5cb11e);console['log'](_0x256fc2(0x1c2)+_0x19b0b6),console[_0x256fc2(0x1c5)](_0x256fc2(0x1be)),_0x3996f8['forEach']((_0x4cd98c,_0x54dcdd)=>{const _0x29263c=_0x256fc2,_0xa15648=_0x5cb11e[_0x54dcdd];console['log'](String['fromCharCode'](0x61+_0x54dcdd)+'.\x20'+_0xa15648),_0x4cd98c[_0x29263c(0x1b8)]('mouseover',()=>{const _0x455801=_0x29263c;_0x19b0b6[_0x455801(0x1c1)](_0xa15648)&&_0x4cd98c[_0x455801(0x1c3)]();});});}}catch(_0x1ce409){console['error']('Failed\x20to\x20fetch\x20AI\x20response:',_0x1ce409);}});
 }
 
 
