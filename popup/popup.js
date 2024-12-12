@@ -7,8 +7,9 @@ const hideButton = document.getElementById('hide');
 const documentFront = document.getElementById('main');
 const viewButton = document.getElementById('show');
 const defaultModel = "gpt-3.5-turbo";
-const version = "0.0.2dev";
+const version = "0.0.4dev";
 let isSetup = false;
+
 
 const versionP = document.createElement("p");
 versionP.textContent = "Version: "+version;
@@ -103,7 +104,23 @@ async function injectCode(apiKey, model) {
         const url = 'https://api.naga.ac/v1/chat/completions';
         console.log(questionText);
         console.log(answerOptions);
-        function _0x6260(_0x5de0f6,_0x425d39){const _0x1dff15=_0x1dff();return _0x6260=function(_0x62603e,_0x46776a){_0x62603e=_0x62603e-0x17d;let _0x451c91=_0x1dff15[_0x62603e];return _0x451c91;},_0x6260(_0x5de0f6,_0x425d39);}const _0x13333b=_0x6260;(function(_0x21f999,_0xf386f1){const _0x34ea71=_0x6260,_0x33bada=_0x21f999();while(!![]){try{const _0x2dd18a=-parseInt(_0x34ea71(0x187))/0x1+-parseInt(_0x34ea71(0x184))/0x2*(-parseInt(_0x34ea71(0x18b))/0x3)+parseInt(_0x34ea71(0x181))/0x4+parseInt(_0x34ea71(0x185))/0x5*(parseInt(_0x34ea71(0x17e))/0x6)+parseInt(_0x34ea71(0x180))/0x7*(parseInt(_0x34ea71(0x189))/0x8)+parseInt(_0x34ea71(0x186))/0x9*(-parseInt(_0x34ea71(0x17f))/0xa)+-parseInt(_0x34ea71(0x18d))/0xb;if(_0x2dd18a===_0xf386f1)break;else _0x33bada['push'](_0x33bada['shift']());}catch(_0x5dc965){_0x33bada['push'](_0x33bada['shift']());}}}(_0x1dff,0xaaeb0));const requestBody={'model':model,'messages':[{'role':_0x13333b(0x18a),'content':_0x13333b(0x188)},{'role':_0x13333b(0x183),'content':_0x13333b(0x17d)+questionText+_0x13333b(0x182)+answerOptions[_0x13333b(0x18c)](',\x20')}]};function _0x1dff(){const _0x3ae44b=['Te\x20daré\x20una\x20pregunta\x20y\x20varias\x20opciones\x20de\x20respuesta.\x20Debes\x20elegir\x20la\x20opción\x20más\x20adecuada\x20basada\x20en\x20el\x20contexto\x20proporcionado','23528zHbaNQ','system','3giPCjb','join','17593972imnGKT','Pregunta:\x20','4099944ncZRGA','270vIQtKI','175MAcZAf','2340292kNhBPU','\x0aOpciones:\x20','user','2139208bLqeXd','10XLppQb','223569xvnmnU','124611eAFHOi'];_0x1dff=function(){return _0x3ae44b;};return _0x1dff();}
+        const requestBody = {
+            model: model,
+            messages: [
+              {
+                role: 'system',
+                content:
+                  'Te daré una pregunta y varias opciones de respuesta. Debes elegir la opción más adecuada basada en el contexto proporcionado, limitate a elegir',
+              },
+              {
+                role: 'user',
+                content:
+                  'Pregunta: ' + questionText + '\nOpciones: ' + answerOptions,
+              },
+            ],
+          }
+          
+        
         const fetchWithRetry = async (retries = 1, delay = 2000) => {
             for (let i = 0; i < retries; i++) {
                 try {
@@ -119,7 +136,9 @@ async function injectCode(apiKey, model) {
                     if (response.ok) {
                         const data = await response.json();
                         console.log("Okay!!");
-                        return data.choices && data.choices.length > 0 ? data.choices[0].message.content : 'res res not found >.<';
+                        console.log(data);
+                        console.log(questionText + " ans: " +answerOptions)
+                        return data.choices[0]?.message?.content;
                     } else if (response.status === 429) {
                         console.warn(`too many request, ${delay / 1000} seconds...`);
                         await new Promise(res => setTimeout(res, delay)); 
@@ -145,43 +164,57 @@ async function injectCode(apiKey, model) {
     var entries = documentEntries.getElementsByClassName('que multichoice deferredfeedback notyetanswered');
 
 
+    var alrAnalyzed = [];
+
     // Ajustar para av
     for (var i = 0; i < entries.length; i++){
-        console.log("started foreach")
         console.log(entries[i])
-        const questionElement = document.getElementsByClassName("qtext");
-        console.log("asd: "+questionElement)
-        const questionText = questionElement.textContent.trim;
-        console.log(questionElement.textContent)
-        console.log('CF type: Pregunta ' + (index + 1) + ': ' + questionText);
+
+        console.log("Scrapped answers")
+
+        // qe ==> qt ==> qa
+        const qe = document.querySelector('.qtext');
+
+        // Obtiene el texto de la pregunta
+        const questionText = qe ? qe.textContent.trim() : 'No se encontró la pregunta.';        
+        console.log(questionText);
+
+        console.log("Scrapped questions")
         
+
+        // i
+        const answers = entries[i].querySelectorAll('[data-region="answer-label"]');
+
+
+        // t
+        const answerTexts = Array.from(answers).map(answer => answer.textContent.trim());
+        
+        console.log(answerTexts)
+
         try {
-            console.log("Started answer div searcher")
-            const answerElements = Array.from(contentElement.querySelectorAll('.answer div[data-region="answer-label"]'));
-            const answers = answerElements.map(answerElement => {
-                const answerText = answerElement.querySelector('p') ? answerElement.querySelector('p').textContent.trim() : 'Respuesta no encontrada';
-                return answerText;
-            });
-    
-            if (answers.length > 0) {
-                // Llama a una función para obtener la respuesta de IA
-                const aiResponse = fetchAIResponse(questionText, answers);
+            if (answerTexts.length > 0) {
+                // Espera la respuesta de la IA
+                if (alrAnalyzed.includes(questionText)) return;
+
+                const aiResponse = await fetchAIResponse(questionText, answerTexts);
+                alrAnalyzed.includes(questionText);
                 console.log('IA: ' + aiResponse);
                 console.log('Respuestas:');
-    
+        
                 // Muestra las respuestas en la consola
-                answers.forEach((answer, answerIndex) => {
-                    console.log(String.fromCharCode(97 + answerIndex) + '. ' + answer);
-                    answerElements[answerIndex].addEventListener('mouseover', () => {
-                        if (aiResponse.includes(answer)) {
-                            answerElements[answerIndex].click();
+                answers.forEach((answer) => {
+                    answer.addEventListener('mouseover', () => {
+                        if (aiResponse.includes(answer.textContent.trim())) {
+                            answer.click();
                         }
                     });
                 });
             }
         } catch (error) {
-            console.error('Error al obtener respuesta de la IA:', error);
-        } 
+            console.log(error);
+        }
+
+       
     }
 
     // Moodle 4.5 inyection
